@@ -16,18 +16,13 @@ type Tab =
       Exercises: Exercise list }
 
 type Model =
-    { Todos: Todo list
-      Input: string
-      Exercises: Exercise list
-      Tabs: Tab list }
+    { Tabs: Tab list
+      WorkoutOfDay: Exercise list }
 
 type Msg =
-    | GotTodos of Todo list
-    | SetInput of string
-    | AddTodo
-    | AddedTodo of Todo
     | TabClicked of Tab
     | ExoClicked of Tab * Exercise
+    | AddExosClicked
 
 let todosApi =
     Remoting.createApi ()
@@ -69,10 +64,12 @@ let init (): Model * Cmd<Msg> =
         [ { Name = "(5 stomach vaccumms - 5 abwheels) x 5"
             isSelected = false } ]
 
+    let courses =
+        [ { Name = "5 km"; isSelected = false }
+          { Name = "10 km"; isSelected = false } ]
+
     let model =
-        { Todos = []
-          Input = ""
-          Exercises = []
+        { WorkoutOfDay = []
           Tabs =
               [ { Name = "Corde a sauter"
                   isSelected = true
@@ -88,29 +85,15 @@ let init (): Model * Cmd<Msg> =
                   Exercises = tractions }
                 { Name = "Abdominaux"
                   isSelected = false
-                  Exercises = abs } ] }
+                  Exercises = abs }
+                { Name = "Course a pied"
+                  isSelected = false
+                  Exercises = courses } ] }
 
-    let cmd =
-        Cmd.OfAsync.perform todosApi.getTodos () GotTodos
-
-    model, cmd
+    model, Cmd.none
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
-    | GotTodos todos -> { model with Todos = todos }, Cmd.none
-    | SetInput value -> { model with Input = value }, Cmd.none
-    | AddTodo ->
-        let todo = Todo.create model.Input
-
-        let cmd =
-            Cmd.OfAsync.perform todosApi.addTodo todo AddedTodo
-
-        { model with Input = "" }, cmd
-    | AddedTodo todo ->
-        { model with
-              Todos = model.Todos @ [ todo ] },
-        Cmd.none
-
     | TabClicked tab ->
         let clickedTab = { tab with isSelected = true }
 
@@ -123,8 +106,14 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
 
     | ExoClicked (tab, exo) ->
-        let newExo = {exo with isSelected = not exo.isSelected}
-        let newExercices = tab.Exercises |> List.map (fun e -> if e.Name = newExo.Name then newExo else e)
+        let newExo =
+            { exo with
+                  isSelected = not exo.isSelected }
+
+        let newExercices =
+            tab.Exercises
+            |> List.map (fun e -> if e.Name = newExo.Name then newExo else e)
+
         let clickedTab = { tab with Exercises = newExercices }
 
         let newTabs =
@@ -132,6 +121,17 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
             |> List.map (fun tab -> if tab.Name = clickedTab.Name then clickedTab else tab)
 
         ({ model with Tabs = newTabs }, Cmd.none)
+
+    | AddExosClicked ->
+
+        let allSelectedExos =
+            model.Tabs
+            |> List.collect (fun tab -> tab.Exercises)
+            |> List.filter (fun e -> e.isSelected)
+
+        ({ model with
+               WorkoutOfDay = allSelectedExos },
+         Cmd.none)
 
 
 open Fable.React
@@ -154,8 +154,9 @@ let tabContent (model: Model) (dispatch: Msg -> unit) =
         selectedTab.Exercises
         |> List.map
             (fun exo ->
-                Panel.checkbox [Panel.Block.Option.Props [ OnClick(fun _ -> ExoClicked (selectedTab, exo)  |> dispatch) ]] [
-                    input [ Type "checkbox"; Checked exo.isSelected ]
+                Panel.checkbox [ Panel.Block.Option.Props [ OnClick(fun _ -> ExoClicked(selectedTab, exo) |> dispatch) ] ] [
+                    input [ Type "checkbox"
+                            Checked exo.isSelected ]
                     str exo.Name
                 ])
 
@@ -178,34 +179,21 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
             Panel.Block.div [] [
                 Button.button [ Button.Color IsPrimary
                                 Button.IsOutlined
-                                Button.IsFullWidth ] [
+                                Button.IsFullWidth
+                                Button.OnClick(fun _ -> AddExosClicked |> dispatch) ] [
                     str "Ajouter"
                 ]
             ]
-            Panel.panel [] [
+            Panel.panel [ Panel.Option.CustomClass "workout-panel" ] [
                 Panel.heading [] [
                     str "Séance du jour"
                 ]
-                Panel.Block.div [ Panel.Block.IsActive true ] [
-                    Panel.icon [] [
-                        i [ ClassName "fa fa-book" ] []
+
+                for workOutExo in model.WorkoutOfDay do
+                    Panel.Block.label [] [
+                        input [ Type "checkbox" ]
+                        str workOutExo.Name
                     ]
-                    str "Programme 3x1 1x2 3x5"
-                ]
-                Panel.Block.a [] [
-                    Panel.icon [] [
-                        i [ ClassName "fas fa-code-branch" ] []
-                    ]
-                    str "Fable"
-                ]
-                Panel.Block.label [] [
-                    input [ Type "checkbox" ]
-                    str "Remember me"
-                ]
-                Panel.checkbox [] [
-                    input [ Type "checkbox" ]
-                    str "I am a checkbox"
-                ]
             ]
         ]
     ]

@@ -5,3 +5,24 @@
 .workout-panel {
     min-height: 10em;
 }
+
+.workout-exo {
+    display: flex;
+    justify-content: space-around;
+
+    :first-child {
+        flex-grow: 1;
+    }
+}
+
+.red {
+    color:rgb(218, 90, 90);
+
+    .toto {
+        color: yellow;
+    }
+}
+
+.button-hover {
+    cursor: pointer;
+}

@@ -3,26 +3,8 @@ module Index
 open Elmish
 open Fable.Remoting.Client
 open Shared
-
-type Serie =
-    | Serie of string
-    | Program of string list
-
-type Exercise = { Name: string; isSelected: bool }
-
-type Tab =
-    { Name: string
-      isSelected: bool
-      Exercises: Exercise list }
-
-type Model =
-    { Tabs: Tab list
-      WorkoutOfDay: Exercise list }
-
-type Msg =
-    | TabClicked of Tab
-    | ExoClicked of Tab * Exercise
-    | AddExosClicked
+open Types
+open AppCss
 
 let todosApi =
     Remoting.createApi ()
@@ -129,10 +111,19 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
             |> List.collect (fun tab -> tab.Exercises)
             |> List.filter (fun e -> e.isSelected)
 
-        ({ model with
-               WorkoutOfDay = allSelectedExos },
-         Cmd.none)
+        let newTabs =
+            model.Tabs
+            |> List.map (fun tab ->
+                let newExos =  
+                 tab.Exercises 
+                 |> List.map (fun exo -> { exo with isSelected = false })
 
+                { tab with Exercises = newExos })
+
+        ({ model with
+               WorkoutOfDay = model.WorkoutOfDay @ allSelectedExos 
+               Tabs = newTabs },
+         Cmd.none)
 
 open Fable.React
 open Fable.React.Props
@@ -156,11 +147,12 @@ let tabContent (model: Model) (dispatch: Msg -> unit) =
             (fun exo ->
                 Panel.checkbox [ Panel.Block.Option.Props [ OnClick(fun _ -> ExoClicked(selectedTab, exo) |> dispatch) ] ] [
                     input [ Type "checkbox"
-                            Checked exo.isSelected ]
+                            Checked exo.isSelected
+                            ClassName AppCss.ButtonHover ]
                     str exo.Name
                 ])
 
-    Field.div [ Field.Option.CustomClass "exercises-panel" ] tabContent
+    Field.div [ Field.Option.CustomClass AppCss.ExercisesPanel ] tabContent
 
 let containerBox (model: Model) (dispatch: Msg -> unit) =
     Box.box' [] [
@@ -184,15 +176,16 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
                     str "Ajouter"
                 ]
             ]
-            Panel.panel [ Panel.Option.CustomClass "workout-panel" ] [
+            Panel.panel [ Panel.Option.CustomClass AppCss.WorkoutPanel ] [
                 Panel.heading [] [
                     str "Séance du jour"
                 ]
 
                 for workOutExo in model.WorkoutOfDay do
-                    Panel.Block.label [] [
-                        input [ Type "checkbox" ]
-                        str workOutExo.Name
+                    div [Class "panel-block workout-exo button-hover"] [
+
+                        div[][input [ Type "checkbox"; ClassName "button-hover" ]; str workOutExo.Name]
+                        div[][Icon.icon [Icon.Size IsSmall ][ i [ ClassName "fas fa-trash-alt red button-hover" ] [ ]]]            
                     ]
             ]
         ]

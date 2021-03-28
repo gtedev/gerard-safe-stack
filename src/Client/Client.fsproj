@@ -5,10 +5,16 @@
         <DefineConstants>FABLE_COMPILER</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="AppCss.fs" />
+        <Compile Include="Types.fs" />
+        <None Include="App.scss" />
         <None Include="index.html" />
         <None Include="paket.references" />
         <Compile Include="Index.fs" />
         <Compile Include="App.fs" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Zanaptak.TypedCssClasses" Version="0.4.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.fsproj" />

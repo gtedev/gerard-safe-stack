@@ -14,69 +14,91 @@ let todosApi =
 let init (): Model * Cmd<Msg> =
 
     let cordeASatuer =
-        [ { Name = "3x1 1x2 3x5"
+        [ { Item =
+                Program
+                    { Name = "3x1 1x2 3x5"
+                      Exercises =
+                          [ { Name = "1 min" }
+                            { Name = "1 min" }
+                            { Name = "1 min" }
+                            { Name = "2 min" }
+                            { Name = "5 min" }
+                            { Name = "5 min" }
+                            { Name = "5 min" } ] }
             isSelected = false }
-          { Name = "3 x 5 min"
+          { Item = Exercise { Name = "5 min" }
             isSelected = false }
-          { Name = "1 min"; isSelected = false }
-          { Name = "2 min"; isSelected = false } ]
+          { Item = Exercise { Name = "2 min" }
+            isSelected = false }
+          { Item = Exercise { Name = "1 min" }
+            isSelected = false } ]
 
     let pompes =
-        [ { Name = "10 pompes"
+        [ { Item = Exercise { Name = "10 pompes" }
             isSelected = false }
-          { Name = "20 pompes"
+          { Item = Exercise { Name = "20 pompes" }
             isSelected = false }
-          { Name = "20 pompes lestees 10kgs"
+          { Item = Exercise { Name = "20 pompes lestees 10kgs" }
             isSelected = false }
-          { Name = "20 pompes jambes suspension"
+          { Item = Exercise { Name = "20 pompes jambes suspension" }
             isSelected = false } ]
 
     let dips =
-        [ { Name = "10 dips"; isSelected = false }
-          { Name = "20 dips lestees 10kgs"
+        [ { Item = Exercise { Name = "10 dips" }
+            isSelected = false }
+          { Item = Exercise { Name = "20 dips lestees 10kgs" }
             isSelected = false } ]
 
     let tractions =
-        [ { Name = "6 tractions"
+        [ { Item = Exercise { Name = "6 tractions" }
             isSelected = false }
-          { Name = "3 lst 10kgs - 3"
+          { Item = Exercise { Name = "3 lst 10kgs - 3" }
             isSelected = false } ]
 
     let abs =
-        [ { Name = "(5 stomach vaccumms - 5 abwheels) x 5"
+        [ { Item = Exercise { Name = "(5 stomach vaccumms - 5 abwheels) x 5" }
             isSelected = false } ]
 
     let courses =
-        [ { Name = "5 km"; isSelected = false }
-          { Name = "10 km"; isSelected = false } ]
+        [ { Item = Exercise { Name = "5 km" }
+            isSelected = false }
+          { Item = Exercise { Name = "10 km" }
+            isSelected = false } ]
 
     let model =
         { WorkoutOfDay = []
           Tabs =
               [ { Name = "Corde a sauter"
                   isSelected = true
-                  Exercises = cordeASatuer }
+                  WorkoutItems = cordeASatuer }
                 { Name = "Pompes"
                   isSelected = false
-                  Exercises = pompes }
+                  WorkoutItems = pompes }
                 { Name = "Dips"
                   isSelected = false
-                  Exercises = dips }
+                  WorkoutItems = dips }
                 { Name = "Tractions"
                   isSelected = false
-                  Exercises = tractions }
+                  WorkoutItems = tractions }
                 { Name = "Abdominaux"
                   isSelected = false
-                  Exercises = abs }
+                  WorkoutItems = abs }
                 { Name = "Course a pied"
                   isSelected = false
-                  Exercises = courses } ] }
+                  WorkoutItems = courses } ] }
 
     model, Cmd.none
+
+
+let getWorkoutName w =
+    match w with
+    | Exercise exo -> exo.Name
+    | Program prgm -> prgm.Name
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
     | TabClicked tab ->
+
         let clickedTab = { tab with isSelected = true }
 
         let newTabs =
@@ -87,16 +109,23 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
         ({ model with Tabs = newTabs }, Cmd.none)
 
 
-    | ExoClicked (tab, exo) ->
-        let newExo =
-            { exo with
-                  isSelected = not exo.isSelected }
+    | WorkoutClicked (tab, workout) ->
 
-        let newExercices =
-            tab.Exercises
-            |> List.map (fun e -> if e.Name = newExo.Name then newExo else e)
+        let newWorkout =
+            { workout with
+                  isSelected = not workout.isSelected }
 
-        let clickedTab = { tab with Exercises = newExercices }
+        let newWorkoutItems =
+            tab.WorkoutItems
+            |> List.map
+                (fun wkout ->
+                    if (wkout.Item |> getWorkoutName) = (newWorkout.Item |> getWorkoutName)
+                    then newWorkout
+                    else wkout)
+
+        let clickedTab =
+            { tab with
+                  WorkoutItems = newWorkoutItems }
 
         let newTabs =
             model.Tabs
@@ -104,24 +133,27 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
         ({ model with Tabs = newTabs }, Cmd.none)
 
-    | AddExosClicked ->
 
-        let allSelectedExos =
+    | AddWorkoutItemsClicked ->
+
+        let selectedWorkoutItems =
             model.Tabs
-            |> List.collect (fun tab -> tab.Exercises)
-            |> List.filter (fun e -> e.isSelected)
+            |> List.collect (fun tab -> tab.WorkoutItems)
+            |> List.filter (fun wkout -> wkout.isSelected)
 
         let newTabs =
             model.Tabs
-            |> List.map (fun tab ->
-                let newExos =  
-                 tab.Exercises 
-                 |> List.map (fun exo -> { exo with isSelected = false })
+            |> List.map
+                (fun tab ->
 
-                { tab with Exercises = newExos })
+                    let newWorkouts =
+                        tab.WorkoutItems
+                        |> List.map (fun exo -> { exo with isSelected = false })
+
+                    { tab with WorkoutItems = newWorkouts })
 
         ({ model with
-               WorkoutOfDay = model.WorkoutOfDay @ allSelectedExos 
+               WorkoutOfDay = model.WorkoutOfDay @ selectedWorkoutItems
                Tabs = newTabs },
          Cmd.none)
 
@@ -142,14 +174,15 @@ let tabContent (model: Model) (dispatch: Msg -> unit) =
         List.find (fun t -> t.isSelected) model.Tabs
 
     let tabContent =
-        selectedTab.Exercises
+        selectedTab.WorkoutItems
         |> List.map
             (fun exo ->
-                Panel.checkbox [ Panel.Block.Option.Props [ OnClick(fun _ -> ExoClicked(selectedTab, exo) |> dispatch) ] ] [
+                Panel.checkbox [ Panel.Block.Option.Props [ OnClick
+                                                                (fun _ -> WorkoutClicked(selectedTab, exo) |> dispatch) ] ] [
                     input [ Type "checkbox"
                             Checked exo.isSelected
                             ClassName AppCss.ButtonHover ]
-                    str exo.Name
+                    str (exo.Item |> getWorkoutName)
                 ])
 
     Field.div [ Field.Option.CustomClass AppCss.ExercisesPanel ] tabContent
@@ -172,7 +205,7 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
                 Button.button [ Button.Color IsPrimary
                                 Button.IsOutlined
                                 Button.IsFullWidth
-                                Button.OnClick(fun _ -> AddExosClicked |> dispatch) ] [
+                                Button.OnClick(fun _ -> AddWorkoutItemsClicked |> dispatch) ] [
                     str "Ajouter"
                 ]
             ]
@@ -182,10 +215,18 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
                 ]
 
                 for workOutExo in model.WorkoutOfDay do
-                    div [Class "panel-block workout-exo button-hover"] [
+                    div [ Class "panel-block workout-exo button-hover" ] [
 
-                        div[][input [ Type "checkbox"; ClassName "button-hover" ]; str workOutExo.Name]
-                        div[][Icon.icon [Icon.Size IsSmall ][ i [ ClassName "fas fa-trash-alt red button-hover" ] [ ]]]            
+                        div [] [
+                            input [ Type "checkbox"
+                                    ClassName "button-hover" ]
+                            str (workOutExo.Item |> getWorkoutName)
+                        ]
+                        div [] [
+                            Icon.icon [ Icon.Size IsSmall ] [
+                                i [ ClassName "fas fa-trash-alt red button-hover" ] []
+                            ]
+                        ]
                     ]
             ]
         ]

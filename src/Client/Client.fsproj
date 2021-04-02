@@ -17,6 +17,7 @@
       <PackageReference Include="Zanaptak.TypedCssClasses" Version="0.4.0" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\FSharp.Core.Extensions\FSharp.Core.Extensions.fsproj" />
         <ProjectReference Include="..\Shared\Shared.fsproj" />
     </ItemGroup>
     <Import Project="..\..\.paket\Paket.Restore.targets" />

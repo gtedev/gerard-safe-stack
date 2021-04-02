@@ -39,7 +39,18 @@ let init (): Model * Cmd<Msg> =
             isSelected = false }
           { Item = Exercise { Name = "20 pompes" }
             isSelected = false }
-          { Item = Exercise { Name = "20 pompes lestees 10kgs" }
+          { Item = Program { Name = "10 x 20 pompes lestées 10kgs"
+                             Exercises =
+                             [ { Name = "série 1" }
+                               { Name = "série 2" }
+                               { Name = "série 3" }
+                               { Name = "série 4" }
+                               { Name = "série 5" }
+                               { Name = "série 6" }
+                               { Name = "série 7" }
+                               { Name = "série 8" }
+                               { Name = "série 9" }
+                               { Name = "série 10" } ]}
             isSelected = false }
           { Item = Exercise { Name = "20 pompes jambes suspension" }
             isSelected = false } ]
@@ -47,17 +58,45 @@ let init (): Model * Cmd<Msg> =
     let dips =
         [ { Item = Exercise { Name = "10 dips" }
             isSelected = false }
-          { Item = Exercise { Name = "20 dips lestees 10kgs" }
+          { Item = Exercise { Name = "20 dips" }
+            isSelected = false }
+          { Item = Program { Name = "10 x (10 dips lestées 10kgs)"
+                             Exercises =
+                             [ { Name = "série 1" }
+                               { Name = "série 2" }
+                               { Name = "série 3" }
+                               { Name = "série 4" }
+                               { Name = "série 5" }
+                               { Name = "série 6" }
+                               { Name = "série 7" }
+                               { Name = "série 8" }
+                               { Name = "série 9" }
+                               { Name = "série 10" } ]}
             isSelected = false } ]
 
     let tractions =
         [ { Item = Exercise { Name = "6 tractions" }
             isSelected = false }
-          { Item = Exercise { Name = "3 lst 10kgs - 3" }
+          { Item = Program { Name = "9 x (3 lestées 10kgs - 3)"
+                             Exercises =
+                             [ { Name = "série 1" }
+                               { Name = "série 2" }
+                               { Name = "série 3" }
+                               { Name = "série 4" }
+                               { Name = "série 5" }
+                               { Name = "série 6" }
+                               { Name = "série 7" }
+                               { Name = "série 8" }
+                               { Name = "série 9" } ]}
             isSelected = false } ]
 
     let abs =
-        [ { Item = Exercise { Name = "(5 stomach vaccumms - 5 abwheels) x 5" }
+        [ { Item = Program { Name = "3 x (5 stomach vaccumms - 5 abwheels)"
+                             Exercises = [
+                                 { Name = "5 stomach vaccumms - 5 abwheels" }
+                                 { Name = "5 stomach vaccumms - 5 abwheels" }
+                                 { Name = "5 stomach vaccumms - 5 abwheels" }
+                                  ]}
             isSelected = false } ]
 
     let courses =

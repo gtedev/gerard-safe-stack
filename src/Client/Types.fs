@@ -31,4 +31,5 @@ type Msg =
     | TabClicked of Tab
     | WorkoutClicked of Tab * SelectableItem<WorkoutItem>
     | AddWorkoutItemsClicked
+    | RemoveWorkoutOfDay of int * SelectableItem<WorkoutItem>
 

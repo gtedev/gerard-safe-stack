@@ -157,6 +157,19 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
                Tabs = newTabs },
          Cmd.none)
 
+    | RemoveWorkoutOfDay (index, workout) ->
+
+       let newWorkoutOfDays = 
+           model.WorkoutOfDay
+           |> List.mapi (fun index wkout -> (index, wkout))
+           |> List.filter (fun (i, wkout) -> index <> i)
+           |> List.map (fun (i, wkout) -> wkout)
+
+       ({ model with
+               WorkoutOfDay = newWorkoutOfDays },
+         Cmd.none)
+
+
 open Fable.React
 open Fable.React.Props
 open Fulma
@@ -187,6 +200,28 @@ let tabContent (model: Model) (dispatch: Msg -> unit) =
 
     Field.div [ Field.Option.CustomClass AppCss.ExercisesPanel ] tabContent
 
+
+let workOutContent (model: Model) (dispatch: Msg -> unit) =
+    let myList = 
+         model.WorkoutOfDay 
+          |> List.mapi (fun index workOutExo -> 
+            
+            div [ Class "panel-block workout-exo button-hover" ] [
+                div [] [
+                    input [ Type "checkbox"
+                            ClassName "button-hover" ]
+                    str (workOutExo.Item |> getWorkoutName)
+                ]
+                div [ OnClick (fun _ -> RemoveWorkoutOfDay (index, workOutExo) |> dispatch)] [
+                    Icon.icon [ Icon.Size IsSmall ] [
+                        i [ ClassName "fas fa-trash-alt red button-hover" ] []
+                    ]
+                ]
+            ]
+         )
+    Field.div [] myList
+    
+
 let containerBox (model: Model) (dispatch: Msg -> unit) =
     Box.box' [] [
         Panel.panel [] [
@@ -214,20 +249,7 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
                     str "Séance du jour"
                 ]
 
-                for workOutExo in model.WorkoutOfDay do
-                    div [ Class "panel-block workout-exo button-hover" ] [
-
-                        div [] [
-                            input [ Type "checkbox"
-                                    ClassName "button-hover" ]
-                            str (workOutExo.Item |> getWorkoutName)
-                        ]
-                        div [] [
-                            Icon.icon [ Icon.Size IsSmall ] [
-                                i [ ClassName "fas fa-trash-alt red button-hover" ] []
-                            ]
-                        ]
-                    ]
+                workOutContent model dispatch
             ]
         ]
     ]

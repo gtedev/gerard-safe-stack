@@ -4,8 +4,10 @@ open Elmish
 open Fable.Remoting.Client
 open Shared
 open Types
-open AppCss
 open FSharp.Core.Extensions
+open Fable.React
+open Fable.React.Props
+open Fulma
 
 let todosApi =
     Remoting.createApi ()
@@ -14,126 +16,30 @@ let todosApi =
 
 let init (): Model * Cmd<Msg> =
 
-    let cordeASatuer =
-        [ { Item =
-                Program
-                    { Name = "3x1 1x2 3x5"
-                      Exercises =
-                          [ { Name = "1 min" }
-                            { Name = "1 min" }
-                            { Name = "1 min" }
-                            { Name = "2 min" }
-                            { Name = "5 min" }
-                            { Name = "5 min" }
-                            { Name = "5 min" } ] }
-            isSelected = false }
-          { Item = Exercise { Name = "5 min" }
-            isSelected = false }
-          { Item = Exercise { Name = "2 min" }
-            isSelected = false }
-          { Item = Exercise { Name = "1 min" }
-            isSelected = false } ]
-
-    let pompes =
-        [ { Item = Exercise { Name = "10 pompes" }
-            isSelected = false }
-          { Item = Exercise { Name = "20 pompes" }
-            isSelected = false }
-          { Item = Program { Name = "10 x 20 pompes lestées 10kgs"
-                             Exercises =
-                             [ { Name = "série 1" }
-                               { Name = "série 2" }
-                               { Name = "série 3" }
-                               { Name = "série 4" }
-                               { Name = "série 5" }
-                               { Name = "série 6" }
-                               { Name = "série 7" }
-                               { Name = "série 8" }
-                               { Name = "série 9" }
-                               { Name = "série 10" } ]}
-            isSelected = false }
-          { Item = Exercise { Name = "20 pompes jambes suspension" }
-            isSelected = false } ]
-
-    let dips =
-        [ { Item = Exercise { Name = "10 dips" }
-            isSelected = false }
-          { Item = Exercise { Name = "20 dips" }
-            isSelected = false }
-          { Item = Program { Name = "10 x (10 dips lestées 10kgs)"
-                             Exercises =
-                             [ { Name = "série 1" }
-                               { Name = "série 2" }
-                               { Name = "série 3" }
-                               { Name = "série 4" }
-                               { Name = "série 5" }
-                               { Name = "série 6" }
-                               { Name = "série 7" }
-                               { Name = "série 8" }
-                               { Name = "série 9" }
-                               { Name = "série 10" } ]}
-            isSelected = false } ]
-
-    let tractions =
-        [ { Item = Exercise { Name = "6 tractions" }
-            isSelected = false }
-          { Item = Program { Name = "9 x (3 lestées 10kgs - 3)"
-                             Exercises =
-                             [ { Name = "série 1" }
-                               { Name = "série 2" }
-                               { Name = "série 3" }
-                               { Name = "série 4" }
-                               { Name = "série 5" }
-                               { Name = "série 6" }
-                               { Name = "série 7" }
-                               { Name = "série 8" }
-                               { Name = "série 9" } ]}
-            isSelected = false } ]
-
-    let abs =
-        [ { Item = Program { Name = "3 x (5 stomach vaccumms - 5 abwheels)"
-                             Exercises = [
-                                 { Name = "5 stomach vaccumms - 5 abwheels" }
-                                 { Name = "5 stomach vaccumms - 5 abwheels" }
-                                 { Name = "5 stomach vaccumms - 5 abwheels" }
-                                  ]}
-            isSelected = false } ]
-
-    let courses =
-        [ { Item = Exercise { Name = "5 km" }
-            isSelected = false }
-          { Item = Exercise { Name = "10 km" }
-            isSelected = false } ]
-
     let model =
         { WorkoutOfDay = []
           Tabs =
               [ { Name = "Corde a sauter"
                   isSelected = true
-                  WorkoutItems = cordeASatuer }
+                  WorkoutItems = Helper.cordeASatuer () }
                 { Name = "Pompes"
                   isSelected = false
-                  WorkoutItems = pompes }
+                  WorkoutItems = Helper.pompes () }
                 { Name = "Dips"
                   isSelected = false
-                  WorkoutItems = dips }
+                  WorkoutItems = Helper.dips () }
                 { Name = "Tractions"
                   isSelected = false
-                  WorkoutItems = tractions }
+                  WorkoutItems = Helper.tractions () }
                 { Name = "Abdominaux"
                   isSelected = false
-                  WorkoutItems = abs }
+                  WorkoutItems = Helper.abs () }
                 { Name = "Course a pied"
                   isSelected = false
-                  WorkoutItems = courses } ] }
+                  WorkoutItems = Helper.courses () } ] }
 
     model, Cmd.none
 
-
-let getWorkoutName w =
-    match w with
-    | Exercise exo -> exo.Name
-    | Program prgm -> prgm.Name
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
@@ -199,121 +105,13 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
     | RemoveWorkoutOfDay (index, _) ->
 
-       let newWorkoutOfDays =
-           model.WorkoutOfDay
-           |> List.tryRemoveAt index
+        let newWorkoutOfDays =
+            model.WorkoutOfDay |> List.tryRemoveAt index
 
-       ({ model with
+        ({ model with
                WorkoutOfDay = newWorkoutOfDays },
          Cmd.none)
 
-
-open Fable.React
-open Fable.React.Props
-open Fulma
-
-let navBrand =
-    Navbar.Brand.div [] [
-        Navbar.Item.a [ Navbar.Item.Props [ Href "https://safe-stack.github.io/" ]
-                        Navbar.Item.IsActive true ] [
-            img [ Src "/favicon.png"; Alt "Logo" ]
-        ]
-    ]
-
-let tabContent (model: Model) (dispatch: Msg -> unit) =
-    let selectedTab =
-        List.find (fun t -> t.isSelected) model.Tabs
-
-    let tabContent =
-        selectedTab.WorkoutItems
-        |> List.map
-            (fun exo ->
-                Panel.checkbox [ Panel.Block.Option.Props [ OnClick
-                                                                (fun _ -> WorkoutClicked(selectedTab, exo) |> dispatch) ] ] [
-                    input [ Type "checkbox"
-                            Checked exo.isSelected
-                            ClassName AppCss.ButtonHover ]
-                    str (exo.Item |> getWorkoutName)
-                ])
-
-    Field.div [ Field.Option.CustomClass AppCss.ExercisesPanel ] tabContent
-
-
-let workOutContent (model: Model) (dispatch: Msg -> unit) =
-    let myList = 
-         model.WorkoutOfDay 
-          |> List.mapi (fun index workOutExo -> 
-
-             match workOutExo.Item with
-
-              | Exercise exo -> 
-
-                    div [ Class "panel-block workout-exo button-hover" ] [
-                        div [] [
-                            input [ Type "checkbox"
-                                    ClassName "button-hover" ]
-                            str (workOutExo.Item |> getWorkoutName)
-                        ]
-                        div [ OnClick (fun _ -> RemoveWorkoutOfDay (index, workOutExo) |> dispatch)] [
-                            Icon.icon [ Icon.Size IsSmall ] [
-                                i [ ClassName "fas fa-trash-alt red button-hover" ] []
-                            ]
-                        ]
-                    ]
-
-              | Program prgm ->
-              
-                   div [] [
-                        div [ Class "panel-block workout-exo button-hover" ] [
-                            div [] [str (workOutExo.Item |> getWorkoutName)]
-                            div [ OnClick (fun _ -> RemoveWorkoutOfDay (index, workOutExo) |> dispatch)] [
-                                Icon.icon [ Icon.Size IsSmall ] [
-                                    i [ ClassName "fas fa-trash-alt red button-hover" ] []
-                                ]
-                            ]
-                        ]
-                        for exo in prgm.Exercises do
-                        div [Class "panel-block"] [
-                          input [ Type "checkbox"; ClassName "button-hover"; Style [MarginLeft 30] ]
-                          str (exo.Name)
-                        ]
-                    ]
-
-         )
-    Field.div [] myList
-    
-
-let containerBox (model: Model) (dispatch: Msg -> unit) =
-    Box.box' [] [
-        Panel.panel [] [
-            Panel.heading [] [ str "Exercises" ]
-            Panel.tabs [] [
-                for tab in model.Tabs do
-                    Panel.tab [ Panel.Tab.IsActive tab.isSelected
-                                Panel.Tab.Props [ OnClick(fun _ -> TabClicked tab |> dispatch) ] ] [
-                        str tab.Name
-                    ]
-            ]
-
-            tabContent model dispatch
-
-            Panel.Block.div [] [
-                Button.button [ Button.Color IsPrimary
-                                Button.IsOutlined
-                                Button.IsFullWidth
-                                Button.OnClick(fun _ -> AddWorkoutItemsClicked |> dispatch) ] [
-                    str "Ajouter"
-                ]
-            ]
-            Panel.panel [ Panel.Option.CustomClass AppCss.WorkoutPanel ] [
-                Panel.heading [] [
-                    str "Séance du jour"
-                ]
-
-                workOutContent model dispatch
-            ]
-        ]
-    ]
 
 let view (model: Model) (dispatch: Msg -> unit) =
     Hero.hero [ Hero.Color IsPrimary
@@ -323,7 +121,14 @@ let view (model: Model) (dispatch: Msg -> unit) =
                                      BackgroundSize "cover" ] ] ] [
         Hero.head [] [
             Navbar.navbar [] [
-                Container.container [] [ navBrand ]
+                Container.container [] [
+                    Navbar.Brand.div [] [
+                        Navbar.Item.a [ Navbar.Item.Props [ Href "https://safe-stack.github.io/" ]
+                                        Navbar.Item.IsActive true ] [
+                            img [ Src "/favicon.png"; Alt "Logo" ]
+                        ]
+                    ]
+                ]
             ]
         ]
 
@@ -331,10 +136,8 @@ let view (model: Model) (dispatch: Msg -> unit) =
             Container.container [] [
                 Column.column [ Column.Width(Screen.All, Column.Is6)
                                 Column.Offset(Screen.All, Column.Is3) ] [
-                    Heading.p [ Heading.Modifiers [ Modifier.TextAlignment(Screen.All, TextAlignment.Centered) ] ] [
-                        str "Gerard Workouts"
-                    ]
-                    containerBox model dispatch
+                    Workout.header ()
+                    Workout.mainPanel model dispatch
                 ]
             ]
         ]

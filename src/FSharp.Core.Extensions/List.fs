@@ -7,8 +7,8 @@ module List =
     /// <param name="index">index of the item to remove.</param>
     /// <param name="xs">The list to remove the item.</param>
     /// <returns>A list without wihout the item.</returns>
-    let tryRemoveAt (index:int) (xs: 'a list) =
-           xs
-           |> List.mapi (fun index item -> (index, item))
-           |> List.filter (fun (i, _) -> index <> i)
-           |> List.map (fun (_, item) -> item)
+    let tryRemoveAt (index: int) (xs: 'a list) =
+        xs
+        |> List.mapi (fun index item -> (index, item))
+        |> List.filter (fun (i, _) -> index <> i)
+        |> List.map (fun (_, item) -> item)

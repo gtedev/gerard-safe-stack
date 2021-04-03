@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <DefineConstants>FABLE_COMPILER</DefineConstants>
-    </PropertyGroup>
-    <ItemGroup>
-        <Compile Include="AppCss.fs" />
-        <Compile Include="Types.fs" />
-        <None Include="App.scss" />
-        <None Include="index.html" />
-        <None Include="paket.references" />
-        <Compile Include="Index.fs" />
-        <Compile Include="App.fs" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="Zanaptak.TypedCssClasses" Version="0.4.0" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\FSharp.Core.Extensions\FSharp.Core.Extensions.fsproj" />
-        <ProjectReference Include="..\Shared\Shared.fsproj" />
-    </ItemGroup>
-    <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DefineConstants>FABLE_COMPILER</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AppCss.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="Helper.fs" />
+    <None Include="App.scss" />
+    <None Include="index.html" />
+    <None Include="paket.references" />
+    <Compile Include="Workout.fs" />
+    <Compile Include="Index.fs" />
+    <Compile Include="App.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Zanaptak.TypedCssClasses" Version="0.4.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSharp.Core.Extensions\FSharp.Core.Extensions.fsproj" />
+    <ProjectReference Include="..\Shared\Shared.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

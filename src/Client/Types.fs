@@ -1,5 +1,7 @@
 module Types
 
+open System
+
 type ItemPosition = int
 
 type BodyAreaType =
@@ -29,10 +31,12 @@ type Tab =
 
 type Model =
     { Tabs: Tab list
-      WorkoutOfDay: SelectableItem<WorkoutItem> list }
+      WorkoutOfDay: SelectableItem<WorkoutItem> list
+      WorkoutDate: DateTime }
 
 type Msg =
     | TabClicked of Tab
     | WorkoutClicked of Tab * SelectableItem<WorkoutItem>
     | AddWorkoutItemsClicked
     | RemoveWorkoutOfDay of ItemPosition * SelectableItem<WorkoutItem>
+    | OnWorkoutDateChanged of DateTime

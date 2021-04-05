@@ -17,7 +17,8 @@ let todosApi =
 let init (): Model * Cmd<Msg> =
 
     let model =
-        { WorkoutOfDay = []
+        { WorkoutDate  = today()
+          WorkoutOfDay = []
           Tabs =
               [ { Name = "Corde a sauter"
                   isSelected = true
@@ -111,6 +112,13 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
         ({ model with
                WorkoutOfDay = newWorkoutOfDays },
          Cmd.none)
+
+    | OnWorkoutDateChanged selectedDate ->
+
+         ({ model with
+                       WorkoutDate = selectedDate },
+                 Cmd.none)
+       
 
 
 let view (model: Model) (dispatch: Msg -> unit) =

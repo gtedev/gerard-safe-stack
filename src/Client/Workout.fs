@@ -6,6 +6,7 @@ open FSharp.Core.Extensions
 open Fable.React
 open Fable.React.Props
 open Fulma
+open Fable.Core 
 
 let header () =
     Heading.p [ Heading.Modifiers [ Modifier.TextAlignment(Screen.All, TextAlignment.Centered) ] ] [
@@ -106,9 +107,18 @@ let exercisesPanel model dispatch =
 
 
 let workOutOfDayPanel model dispatch =
+    let now = today().ToString("yyyy-MM-dd")
+    let workoutDate = model.WorkoutDate.ToString("yyyy-MM-dd")
+
+    JS.console.log now
+
     Panel.panel [ Panel.Option.CustomClass AppCss.WorkoutPanel ] [
         Panel.heading [] [
             str "Séance du jour"
+            input [
+                ClassName "workout-date input is-primary is-small"
+                Type "date"; Max now ; Value workoutDate
+                OnChange (fun onChangeDateEvent -> OnWorkoutDateChanged (onChangeDateEvent.Value |> toDateTime )|> dispatch)]
         ]
 
         seanceDuJour model dispatch

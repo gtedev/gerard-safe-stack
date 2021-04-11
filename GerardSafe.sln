@@ -31,7 +31,11 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Server.Tests", "tests\Serve
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Client.Tests", "tests\Client\Client.Tests.fsproj", "{CF8C20AC-1FC4-4114-ACB8-6CE6E51F34F9}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Core.Extensions", "src\FSharp.Core.Extensions\FSharp.Core.Extensions.fsproj", "{1CD2F313-71AD-4061-B227-B5873CEA0577}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Core.Extensions", "src\FSharp.Core.Extensions\FSharp.Core.Extensions.fsproj", "{1CD2F313-71AD-4061-B227-B5873CEA0577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerardSafe.MongoDb.Database", "GerardSafe.MongoDb.Client\GerardSafe.MongoDb.Database.csproj", "{7F354004-E415-4A6F-A515-DC3153CDAE7D}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GerardSafe.MongoDb.Database.Seed", "GerardSafe.MongoDb.Database.Seed\GerardSafe.MongoDb.Database.Seed.fsproj", "{B4EF7AAB-DC94-499E-93CF-304B0967702A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +131,30 @@ Global
 		{1CD2F313-71AD-4061-B227-B5873CEA0577}.Release|x64.Build.0 = Release|Any CPU
 		{1CD2F313-71AD-4061-B227-B5873CEA0577}.Release|x86.ActiveCfg = Release|Any CPU
 		{1CD2F313-71AD-4061-B227-B5873CEA0577}.Release|x86.Build.0 = Release|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Debug|x64.Build.0 = Debug|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Debug|x86.Build.0 = Debug|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Release|x64.ActiveCfg = Release|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Release|x64.Build.0 = Release|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Release|x86.ActiveCfg = Release|Any CPU
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D}.Release|x86.Build.0 = Release|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Debug|x64.Build.0 = Debug|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Debug|x86.Build.0 = Debug|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Release|x64.Build.0 = Release|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Release|x86.ActiveCfg = Release|Any CPU
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +167,8 @@ Global
 		{9ADB89B5-54DA-4F25-B2D0-013A7FCEFABA} = {3820D9E8-1B4E-486E-9C46-D52E3784D222}
 		{CF8C20AC-1FC4-4114-ACB8-6CE6E51F34F9} = {3820D9E8-1B4E-486E-9C46-D52E3784D222}
 		{1CD2F313-71AD-4061-B227-B5873CEA0577} = {F84DCF8A-FC1A-4677-AF4D-616AD7DB3470}
+		{7F354004-E415-4A6F-A515-DC3153CDAE7D} = {F84DCF8A-FC1A-4677-AF4D-616AD7DB3470}
+		{B4EF7AAB-DC94-499E-93CF-304B0967702A} = {F84DCF8A-FC1A-4677-AF4D-616AD7DB3470}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4416346-163D-43E0-8FF1-B8A3615A891C}

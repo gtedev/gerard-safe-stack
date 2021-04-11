@@ -1,6 +1,7 @@
 module Types
 
 open System
+open Shared
 
 type ItemPosition = int
 
@@ -35,6 +36,7 @@ type Model =
       WorkoutDate: DateTime }
 
 type Msg =
+    | GotWorkouts of Workout list
     | TabClicked of Tab
     | WorkoutClicked of Tab * SelectableItem<WorkoutItem>
     | AddWorkoutItemsClicked

@@ -8,11 +8,12 @@ open FSharp.Core.Extensions
 open Fable.React
 open Fable.React.Props
 open Fulma
+open Fable.Core
 
-let todosApi =
+let workoutApi =
     Remoting.createApi ()
     |> Remoting.withRouteBuilder Route.builder
-    |> Remoting.buildProxy<ITodosApi>
+    |> Remoting.buildProxy<WorkoutApi>
 
 let init (): Model * Cmd<Msg> =
 
@@ -39,11 +40,17 @@ let init (): Model * Cmd<Msg> =
                   isSelected = false
                   WorkoutItems = Helper.courses () } ] }
 
-    model, Cmd.none
+    let cmd = Cmd.OfAsync.perform workoutApi.getWorkouts () GotWorkouts
+    model, cmd
 
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
+    | GotWorkouts workouts ->
+            JS.console.log ("GotWorkouts", workouts)
+            
+            (model, Cmd.none)
+
     | TabClicked tab ->
 
         let clickedTab = { tab with isSelected = true }

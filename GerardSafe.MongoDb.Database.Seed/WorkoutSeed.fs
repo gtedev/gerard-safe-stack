@@ -16,12 +16,13 @@ let private withExercises exercises (workout: Workout) =
     workout
 
 let private serieExercises count =
-    [ 1 .. count ] |> List.map (fun i -> $"série {i}")
+    // [ 1 .. count ] |> List.map (fun i -> $"série {i}")    donet build cannot handle string interpolation...
+    [ 1 .. count ] |> List.map (fun i -> sprintf "série %i" i)
 
 let seedWorkout (seedInserter: Workout list -> unit) (getExistingWorkout: unit -> Workout list) =
 
     let cordeASauter =
-        [ Program "3x1 1x2 3x5"
+        [ Program (string "3x1 1x2 3x5")
           |> withExercises [ "1 min"
                              "1 min"
                              "1 min"

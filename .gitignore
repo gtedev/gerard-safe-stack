@@ -15,3 +15,6 @@ release.sh
 *.orig
 *.DotSettings.user
 /src/Client/Client.fsproj.user
+/src/Server/appsettings.Development.json
+/GerardSafe.MongoDb.Database.Seed/GerardSafe.MongoDb.Database.Seed.fsproj.user
+/GerardSafe.MongoDb.Database/GerardSafe.MongoDb.Database.csproj.user

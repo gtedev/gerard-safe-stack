@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GerardSafe.MongoDb.Database.DependencyInjection
@@ -6,7 +7,15 @@ namespace GerardSafe.MongoDb.Database.DependencyInjection
     {
         public static IServiceCollection AddMongoDbDatabase(this IServiceCollection serviceCollection)
         {
-            var mongoDbClient = MongoDbClient.CreateClient();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var configuration = serviceProvider.GetService<IConfiguration>();
+
+            var connectionString =
+                configuration.GetSection("MongoDbSettings")
+                .GetSection("ConnectionString")
+                .Value;
+
+            var mongoDbClient = MongoDbClient.CreateClient(connectionString);
             serviceCollection.AddSingleton(mongoDbClient);
             serviceCollection.AddTransient<IMongoDBContext, MongoDBContext>();
 

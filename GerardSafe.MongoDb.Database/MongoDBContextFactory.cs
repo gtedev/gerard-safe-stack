@@ -10,7 +10,8 @@ namespace GerardSafe.MongoDb.Database
                 ConnectionString = "mongodb://localhost:27017"
             };
 
-            return new MongoDBContext(settings);
+            var client = MongoDbClient.CreateClient(settings.ConnectionString);
+            return new MongoDBContext(client, settings);
         }
     }
 }

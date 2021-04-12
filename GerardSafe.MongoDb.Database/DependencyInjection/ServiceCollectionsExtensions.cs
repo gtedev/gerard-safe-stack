@@ -12,7 +12,6 @@ namespace GerardSafe.MongoDb.Database.DependencyInjection
 
             var settings = new MongoDbSettings();
             configuration.GetSection(nameof(MongoDbSettings)).Bind(settings);
-
             serviceCollection.AddSingleton<IMongoDbSettings, MongoDbSettings>((_) => settings);
 
             var mongoDbClient = MongoDbClient.CreateClient(settings.ConnectionString);

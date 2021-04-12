@@ -11,12 +11,10 @@ namespace GerardSafe.MongoDb.Database
         private IMongoDatabase mongoDatabase;
         private IMongoCollection<Workout> mongoDbWorkouts;
 
-        public MongoDBContext(IMongoDbSettings settings) 
+        public MongoDBContext(MongoClient mongoDbClient, IMongoDbSettings settings) 
         {
             this.settings = settings;
-
-            this.mongoDbClient =
-                new MongoClient(settings.ConnectionString);
+            this.mongoDbClient = mongoDbClient;
 
             this.mongoDatabase =
                 this.mongoDbClient.GetDatabase(settings.DatabaseName);

@@ -10,6 +10,7 @@ open Farmer.Builders
 
 Target.initEnvironment ()
 
+let solutionPath = Path.getFullName "./GerardSafe.sln"
 let sharedPath = Path.getFullName "./src/Shared"
 let serverPath = Path.getFullName "./src/Server"
 let deployDir = Path.getFullName "./deploy"
@@ -33,6 +34,10 @@ let npm args workingDir =
     |> CreateProcess.ensureExitCode
     |> Proc.run
     |> ignore
+
+let dotnetCustom cmd (customCommand:string) =
+    let result = DotNet.exec (DotNet.Options.withCustomParams (Some customCommand)) cmd ""
+    if result.ExitCode <> 0 then failwithf "'dotnet %s' failed in %s" cmd customCommand
 
 let dotnet cmd workingDir =
     let result = DotNet.exec (DotNet.Options.withWorkingDirectory workingDir) cmd ""
@@ -63,7 +68,8 @@ Target.create "Azure" (fun _ ->
 )
 
 Target.create "Run" (fun _ ->
-    dotnet "build" sharedPath
+    dotnetCustom "build" solutionPath
+    //dotnet "build" sharedPath
     [ async { dotnet "watch run" serverPath }
       async { npm "run start" "." } ]
     |> Async.Parallel

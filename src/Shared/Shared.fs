@@ -2,22 +2,12 @@ namespace Shared
 
 open System
 
-type Todo =
-    { Id : Guid
-      Description : string }
-
-module Todo =
-    let isValid (description: string) =
-        String.IsNullOrWhiteSpace description |> not
-
-    let create (description: string) =
-        { Id = Guid.NewGuid()
-          Description = description }
-
 module Route =
-    let builder typeName methodName =
-        sprintf "/api/%s/%s" typeName methodName
+    let builder (typeName: string) methodName =
 
-type ITodosApi =
-    { getTodos : unit -> Async<Todo list>
-      addTodo : Todo -> Async<Todo> }
+        let apiName = typeName.Replace("Api", "")
+
+        sprintf "/api/%s/%s" apiName methodName
+
+type WorkoutApi =
+    { getWorkouts: unit -> Async<WorkoutItem list> }

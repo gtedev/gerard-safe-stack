@@ -1,3 +1,5 @@
+@import "~@creativebulma/bulma-badge/dist/bulma-badge.css";
+
 .exercises-panel {
     min-height: 20em;
 }
@@ -29,5 +31,11 @@
 
 .workout-date {
     float: right;
-    width: 150px
+    width: 150px;
+    cursor: pointer;
+}
+
+.workout-tab {
+    // position relative is necessary to make bulma badge working
+    position: relative;
 }

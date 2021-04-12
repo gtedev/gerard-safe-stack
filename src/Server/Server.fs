@@ -5,45 +5,64 @@ open Fable.Remoting.Giraffe
 open Saturn
 
 open Shared
+open Microsoft.AspNetCore.Http
+open Microsoft.Extensions.DependencyInjection
+open GerardSafe.MongoDb.Database.DependencyInjection
+open GerardSafe.MongoDb.Database
+open GerardSafe.MongoDb.Database.Models
 
-type Storage() =
-    let todos = ResizeArray<_>()
+let mapExercises (exercises: Workout list): Exercise list =
+    exercises
+    |> Seq.toList
+    |> List.map
+        (fun exo ->
+            { Name = exo.Name
+              WorkoutFamily = exo.WorkoutFamily })
 
-    member __.GetTodos() = List.ofSeq todos
+let mapToWorkoutItemRecord (w: Workout) =
+    match w.Type with
+    | WorkoutType.Exercise ->
 
-    member __.AddTodo(todo: Todo) =
-        if Todo.isValid todo.Description then
-            todos.Add todo
-            Ok()
-        else
-            Error "Invalid todo"
+        Exercise
+            { Name = w.Name
+              WorkoutFamily = w.WorkoutFamily }
 
-let storage = Storage()
+    | WorkoutType.Program ->
 
-storage.AddTodo(Todo.create "Create new SAFE project")
-|> ignore
+        Program
+            { Name = w.Name
+              WorkoutFamily = w.WorkoutFamily
+              Exercises = w.Exercises |> Seq.toList |> mapExercises }
 
-storage.AddTodo(Todo.create "Write your app")
-|> ignore
 
-storage.AddTodo(Todo.create "Ship it !!!")
-|> ignore
-
-let todosApi =
-    { getTodos = fun () -> async { return storage.GetTodos() }
-      addTodo =
-          fun todo ->
+let createWorkoutApi (mongoDbContext: IMongoDBContext): WorkoutApi =
+    { getWorkouts =
+          fun () ->
               async {
-                  match storage.AddTodo todo with
-                  | Ok () -> return todo
-                  | Error e -> return failwith e
+
+                  let workouts = mongoDbContext.GetWorkouts()
+
+                  let result =
+                      workouts
+                      |> Seq.map (fun record -> mapToWorkoutItemRecord record)
+                      |> Seq.toList
+
+                  return result
               } }
+
+let createWorkoutApiFromContext (httpContext: HttpContext): WorkoutApi =
+    let mongoContext =
+        httpContext.GetService<IMongoDBContext>()
+
+    createWorkoutApi mongoContext
 
 let webApp =
     Remoting.createApi ()
     |> Remoting.withRouteBuilder Route.builder
-    |> Remoting.fromValue todosApi
+    |> Remoting.fromContext createWorkoutApiFromContext
     |> Remoting.buildHttpHandler
+
+let configureServices (services: IServiceCollection) = services.AddMongoDbDatabase()
 
 let app =
     application {
@@ -52,6 +71,7 @@ let app =
         memory_cache
         use_static "public"
         use_gzip
+        service_config configureServices
     }
 
 run app

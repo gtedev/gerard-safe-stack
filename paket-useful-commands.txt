@@ -1,0 +1,3 @@
+dotnet paket add Microsoft.Extensions.Configuration --project GerardSafe.MongoDb.Database
+
+dotnet paket add Microsoft.Extensions.Configuration.Binder --project GerardSafe.MongoDb.Database

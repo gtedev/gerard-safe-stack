@@ -1,0 +1,7 @@
+MongoDB.Driver
+MongoDB.Bson
+Microsoft.Extensions.DependencyInjection.Abstractions
+Microsoft.Extensions.DependencyInjection
+Microsoft.Extensions.Configuration.Abstractions
+Microsoft.Extensions.Configuration
+Microsoft.Extensions.Configuration.Binder

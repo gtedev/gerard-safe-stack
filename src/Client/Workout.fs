@@ -6,7 +6,8 @@ open FSharp.Core.Extensions
 open Fable.React
 open Fable.React.Props
 open Fulma
-open Fable.Core 
+open Fable.Core
+open Shared
 
 let header () =
     Heading.p [ Heading.Modifiers [ Modifier.TextAlignment(Screen.All, TextAlignment.Centered) ] ] [
@@ -81,6 +82,23 @@ let seanceDuJour (model: Model) (dispatch: Msg -> unit) =
 
     Field.div [] myList
 
+let getCountSelected tab =
+    tab.WorkoutItems
+    |> List.filter (fun tab -> tab.isSelected)
+    |> List.length
+
+let workoutTab tab =
+    let countSelected = getCountSelected tab
+
+    if (countSelected) > 0 then
+        div [] [
+            span [ ClassName "badge" ] [
+                str (string (countSelected))
+            ]
+            str tab.Name
+        ]
+    else
+        str tab.Name
 
 let exercisesPanel model dispatch =
     div [] [
@@ -89,7 +107,9 @@ let exercisesPanel model dispatch =
             for tab in model.Tabs do
                 Panel.tab [ Panel.Tab.IsActive tab.isSelected
                             Panel.Tab.Props [ OnClick(fun _ -> TabClicked tab |> dispatch) ] ] [
-                    str tab.Name
+                    div [ ClassName "workout-tab" ] [
+                        workoutTab tab
+                    ]
                 ]
         ]
 
@@ -115,10 +135,14 @@ let workOutOfDayPanel model dispatch =
     Panel.panel [ Panel.Option.CustomClass AppCss.WorkoutPanel ] [
         Panel.heading [] [
             str "Séance du jour"
-            input [
-                ClassName "workout-date input is-primary is-small"
-                Type "date"; Max now ; Value workoutDate
-                OnChange (fun onChangeDateEvent -> OnWorkoutDateChanged (onChangeDateEvent.Value |> toDateTime )|> dispatch)]
+            input [ ClassName "workout-date input is-primary is-small"
+                    Type "date"
+                    Max now
+                    Value workoutDate
+                    OnChange
+                        (fun onChangeDateEvent ->
+                            OnWorkoutDateChanged(onChangeDateEvent.Value |> toDateTime)
+                            |> dispatch) ]
         ]
 
         seanceDuJour model dispatch

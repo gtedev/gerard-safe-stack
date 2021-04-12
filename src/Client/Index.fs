@@ -8,42 +8,41 @@ open FSharp.Core.Extensions
 open Fable.React
 open Fable.React.Props
 open Fulma
+open Fable.Core
 
-let todosApi =
+let workoutApi =
     Remoting.createApi ()
     |> Remoting.withRouteBuilder Route.builder
-    |> Remoting.buildProxy<ITodosApi>
+    |> Remoting.buildProxy<WorkoutApi>
 
 let init (): Model * Cmd<Msg> =
 
     let model =
-        { WorkoutDate  = today()
+        { WorkoutDate = today ()
           WorkoutOfDay = []
-          Tabs =
-              [ { Name = "Corde a sauter"
-                  isSelected = true
-                  WorkoutItems = Helper.cordeASatuer () }
-                { Name = "Pompes"
-                  isSelected = false
-                  WorkoutItems = Helper.pompes () }
-                { Name = "Dips"
-                  isSelected = false
-                  WorkoutItems = Helper.dips () }
-                { Name = "Tractions"
-                  isSelected = false
-                  WorkoutItems = Helper.tractions () }
-                { Name = "Abdominaux"
-                  isSelected = false
-                  WorkoutItems = Helper.abs () }
-                { Name = "Course a pied"
-                  isSelected = false
-                  WorkoutItems = Helper.courses () } ] }
+          Tabs = [{ isSelected = true ; Name= "Loading workouts..." ; WorkoutItems = [] }]  }
 
-    model, Cmd.none
+    let cmd =
+        Cmd.OfAsync.perform workoutApi.getWorkouts () GotWorkouts
+
+    model, cmd
 
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
+    | GotWorkouts workouts ->
+        let tabs =
+            workouts
+            |> List.groupBy (fun w -> w |> getWorkoutNameFamily)
+            |> List.mapi (fun index grp ->
+                { Name = fst grp
+                  isSelected = index = 0
+                  WorkoutItems = grp |> toSelectableWorkoutItems  })
+
+        let newModel = { model with Tabs = tabs}
+
+        (newModel, Cmd.none)
+
     | TabClicked tab ->
 
         let clickedTab = { tab with isSelected = true }
@@ -115,10 +114,10 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
     | OnWorkoutDateChanged selectedDate ->
 
-         ({ model with
-                       WorkoutDate = selectedDate },
-                 Cmd.none)
-       
+        ({ model with
+               WorkoutDate = selectedDate },
+         Cmd.none)
+
 
 
 let view (model: Model) (dispatch: Msg -> unit) =

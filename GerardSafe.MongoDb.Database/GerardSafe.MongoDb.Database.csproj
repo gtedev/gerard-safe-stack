@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy64.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy32.dll" />
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.libmongocrypt\1.2.1\contentFiles\any\netstandard2.1\libmongocrypt.dylib" />
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.libmongocrypt\1.2.1\contentFiles\any\netstandard2.1\libmongocrypt.so" />
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.libmongocrypt\1.2.1\contentFiles\any\netstandard2.1\mongocrypt.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.libmongocrypt\1.2.1\build\../runtimes/win/native/mongocrypt.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.libmongocrypt\1.2.1\build\../runtimes/win/native/mongocrypt.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy64.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.libmongocrypt\1.2.1\build\../runtimes/win/native/mongocrypt.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy64.dll" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

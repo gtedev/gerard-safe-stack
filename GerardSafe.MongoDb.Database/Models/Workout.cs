@@ -6,11 +6,12 @@ namespace GerardSafe.MongoDb.Database.Models
 {
     public class Workout
     {
-        public Workout(string name, WorkoutType type, IEnumerable<Workout> exercises = null)
+        public Workout(string name, WorkoutType type, string workoutFamily, IEnumerable<Workout> exercises = null)
         {
             Name = name;
             Exercises = exercises;
             Type = type;
+            WorkoutFamily = workoutFamily;
         }
 
         [BsonId]
@@ -23,6 +24,8 @@ namespace GerardSafe.MongoDb.Database.Models
         public IEnumerable<Workout> Exercises { get; set; }
 
         public WorkoutType Type { get; set; }
+
+        public string WorkoutFamily { get; set; }
 
         // used in Seed project, to determine if Workout has been already added in datasbase.
         public override bool Equals(object obj)

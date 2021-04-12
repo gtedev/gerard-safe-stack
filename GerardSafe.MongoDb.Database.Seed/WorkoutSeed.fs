@@ -3,14 +3,16 @@ module WorkoutSeed
 open GerardSafe.MongoDb.Database.Models
 
 
-let private Program name = Workout(name, WorkoutType.Program)
+let private Program name family =
+    Workout(name, WorkoutType.Program, family)
 
-let private Exercise name = Workout(name, WorkoutType.Exercise)
+let private Exercise name family =
+    Workout(name, WorkoutType.Exercise, family)
 
 let private withExercises exercises (workout: Workout) =
     let exos =
         exercises
-        |> List.map (fun exoName -> Exercise exoName)
+        |> List.map (fun exoName -> Exercise exoName workout.WorkoutFamily)
 
     workout.Exercises <- exos
     workout
@@ -23,7 +25,7 @@ let private serieExercises count =
 let seedWorkout (seedInserter: Workout list -> unit) (getExistingWorkout: unit -> Workout list) =
 
     let cordeASauter =
-        [ Program(string "3x1 1x2 3x5")
+        [ Program "3x1 1x2 3x5" WorkoutFamily.CordeASauter
           |> withExercises [ "1 min"
                              "1 min"
                              "1 min"
@@ -31,32 +33,32 @@ let seedWorkout (seedInserter: Workout list -> unit) (getExistingWorkout: unit -
                              "5 min"
                              "5 min"
                              "5 min" ]
-          Exercise "5 min"
-          Exercise "2 min"
-          Exercise "1 min" ]
+          Exercise "5 min" WorkoutFamily.CordeASauter
+          Exercise "2 min" WorkoutFamily.CordeASauter
+          Exercise "1 min" WorkoutFamily.CordeASauter ]
 
     let pompes =
-        [ Program "10 x 20 pompes lestées 10kgs"
+        [ Program "10 x 20 pompes lestées 10kgs" WorkoutFamily.Pompes
           |> withExercises (serieExercises 10)
-          Exercise "10 pompes"
-          Exercise "20 pompes" ]
+          Exercise "10 pompes" WorkoutFamily.Pompes
+          Exercise "20 pompes" WorkoutFamily.Pompes ]
 
     let dips =
-        [ Program "10 x (10 dips lestées 10kgs)"
+        [ Program "10 x (10 dips lestées 10kgs)" WorkoutFamily.Dips
           |> withExercises (serieExercises 10)
-          Exercise "10 dips"
-          Exercise "20 dips" ]
+          Exercise "10 dips" WorkoutFamily.Dips
+          Exercise "20 dips" WorkoutFamily.Dips ]
 
     let tractions =
-        [ Program "9 x (3 lestées 10kgs - 3)"
+        [ Program "9 x (3 lestées 10kgs - 3)" WorkoutFamily.Tractions
           |> withExercises (serieExercises 9)
-          Exercise "6 tractions" ]
+          Exercise "6 tractions" WorkoutFamily.Tractions ]
 
     let abs =
-        [ Program "3 x (5 stomach vaccumms - 5 abwheels)"
+        [ Program "3 x (5 stomach vaccumms - 5 abwheels)" WorkoutFamily.Abs
           |> withExercises (serieExercises 3) ]
 
-    let courses = [ Exercise "5 km"; Exercise "10 km" ]
+    let courses = [ Exercise "5 km" WorkoutFamily.CourseAPied; Exercise "10 km" WorkoutFamily.CourseAPied ]
 
     let workouts =
         cordeASauter

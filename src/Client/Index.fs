@@ -8,7 +8,6 @@ open FSharp.Core.Extensions
 open Fable.React
 open Fable.React.Props
 open Fulma
-open Fable.Core
 
 let workoutApi =
     Remoting.createApi ()
@@ -117,7 +116,6 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
         ({ model with
                WorkoutDate = selectedDate },
          Cmd.none)
-
 
 
 let view (model: Model) (dispatch: Msg -> unit) =

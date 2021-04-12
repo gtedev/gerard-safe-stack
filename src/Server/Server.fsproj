@@ -5,6 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="WorkoutApi.fs" />
+    <Compile Include="ConfigureServices.fs" />
     <None Include="paket.references" />
     <Compile Include="Server.fs" />
   </ItemGroup>

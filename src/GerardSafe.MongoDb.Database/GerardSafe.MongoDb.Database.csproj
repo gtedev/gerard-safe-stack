@@ -42,5 +42,4 @@
   <ItemGroup>
     <Content Remove="C:\Users\FamilleTE\.nuget\packages\mongodb.driver.core\2.12.1\build\../runtimes/win/native/snappy64.dll" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

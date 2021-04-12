@@ -33,9 +33,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Client.Tests", "tests\Clien
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Core.Extensions", "src\FSharp.Core.Extensions\FSharp.Core.Extensions.fsproj", "{1CD2F313-71AD-4061-B227-B5873CEA0577}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GerardSafe.MongoDb.Database", "GerardSafe.MongoDb.Database\GerardSafe.MongoDb.Database.csproj", "{7F354004-E415-4A6F-A515-DC3153CDAE7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GerardSafe.MongoDb.Database", "src\GerardSafe.MongoDb.Database\GerardSafe.MongoDb.Database.csproj", "{7F354004-E415-4A6F-A515-DC3153CDAE7D}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "GerardSafe.MongoDb.Database.Seed", "GerardSafe.MongoDb.Database.Seed\GerardSafe.MongoDb.Database.Seed.fsproj", "{B4EF7AAB-DC94-499E-93CF-304B0967702A}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "GerardSafe.MongoDb.Database.Seed", "src\GerardSafe.MongoDb.Database.Seed\GerardSafe.MongoDb.Database.Seed.fsproj", "{B4EF7AAB-DC94-499E-93CF-304B0967702A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,5 @@
-module ConfigureServices
+[<RequireQualifiedAccess>]
+module ConfigureServer
 
 open Microsoft.Extensions.DependencyInjection
 open GerardSafe.MongoDb.Database.DependencyInjection

@@ -1,3 +1,4 @@
+[<RequireQualifiedAccess>]
 module Workout
 
 open Types
@@ -14,26 +15,28 @@ let header () =
         str "Gerard Workouts"
     ]
 
-let allExercises (model: Model) (dispatch: Msg -> unit) =
+let private allExercises (model: Model) (dispatch: Msg -> unit) =
     let selectedTab =
-        List.find (fun t -> t.isSelected) model.Tabs
+        List.tryFind (fun t -> t.isSelected) model.Tabs
 
     let workouts =
-        selectedTab.WorkoutItems
-        |> List.map
-            (fun exo ->
-                Panel.checkbox [ Panel.Block.Option.Props [ OnClick
-                                                                (fun _ -> WorkoutClicked(selectedTab, exo) |> dispatch) ] ] [
-                    input [ Type "checkbox"
-                            Checked exo.isSelected
-                            ClassName AppCss.ButtonHover ]
-                    str (exo.Item |> getWorkoutName)
-                ])
+        match selectedTab with
+        | None -> []
+        | Some tab ->
+            tab.WorkoutItems
+            |> List.map
+                (fun exo ->
+                    Panel.checkbox [ Panel.Block.Option.Props [ OnClick(fun _ -> WorkoutClicked(tab, exo) |> dispatch) ] ] [
+                        input [ Type "checkbox"
+                                Checked exo.isSelected
+                                ClassName AppCss.ButtonHover ]
+                        str (exo.Item |> getWorkoutName)
+                    ])
 
     Field.div [ Field.Option.CustomClass AppCss.ExercisesPanel ] workouts
 
 
-let seanceDuJour (model: Model) (dispatch: Msg -> unit) =
+let private seanceDuJour (model: Model) (dispatch: Msg -> unit) =
     let myList =
         model.WorkoutOfDay
         |> List.mapi
@@ -82,12 +85,14 @@ let seanceDuJour (model: Model) (dispatch: Msg -> unit) =
 
     Field.div [] myList
 
-let getCountSelected tab =
+
+let private  getCountSelected tab =
     tab.WorkoutItems
     |> List.filter (fun tab -> tab.isSelected)
     |> List.length
 
-let workoutTab tab =
+
+let  private workoutTab tab =
     let countSelected = getCountSelected tab
 
     if (countSelected) > 0 then
@@ -100,7 +105,8 @@ let workoutTab tab =
     else
         str tab.Name
 
-let exercisesPanel model dispatch =
+
+let  private exercisesPanel model dispatch =
     div [] [
         Panel.heading [] [ str "Exercises" ]
         Panel.tabs [] [
@@ -126,7 +132,7 @@ let exercisesPanel model dispatch =
     ]
 
 
-let workOutOfDayPanel model dispatch =
+let  private workOutOfDayPanel model dispatch =
     let now = today().ToString("yyyy-MM-dd")
     let workoutDate = model.WorkoutDate.ToString("yyyy-MM-dd")
 

@@ -1,3 +1,4 @@
+[<RequireQualifiedAccess>]
 module WorkoutSeed
 
 open GerardSafe.MongoDb.Database.Models

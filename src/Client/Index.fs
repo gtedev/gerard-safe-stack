@@ -19,7 +19,7 @@ let init (): Model * Cmd<Msg> =
     let model =
         { WorkoutDate = today ()
           WorkoutOfDay = []
-          Tabs = [{ isSelected = true ; Name= "Loading workouts..." ; WorkoutItems = [] }]  }
+          Tabs = []  }
 
     let cmd =
         Cmd.OfAsync.perform workoutApi.getWorkouts () GotWorkouts

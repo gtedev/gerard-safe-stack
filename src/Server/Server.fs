@@ -19,7 +19,7 @@ let app =
         memory_cache
         use_static "public"
         use_gzip
-        service_config ConfigureServices.configureServices
+        service_config ConfigureServer.configureServices
     }
 
 run app

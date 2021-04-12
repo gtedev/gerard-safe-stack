@@ -1,3 +1,4 @@
+[<RequireQualifiedAccess>]
 module WorkoutApi
 
 open Microsoft.AspNetCore.Http

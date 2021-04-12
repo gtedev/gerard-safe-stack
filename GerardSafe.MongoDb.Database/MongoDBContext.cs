@@ -6,14 +6,20 @@ namespace GerardSafe.MongoDb.Database
 {
     public class MongoDBContext : IMongoDBContext
     {
+        private IMongoDbSettings settings;
         private MongoClient mongoDbClient;
         private IMongoDatabase mongoDatabase;
         private IMongoCollection<Workout> mongoDbWorkouts;
 
-        public MongoDBContext(MongoClient mongoDbClient)
+        public MongoDBContext(IMongoDbSettings settings) 
         {
-            this.mongoDbClient = mongoDbClient;
-            this.mongoDatabase = this.mongoDbClient.GetDatabase("local");
+            this.settings = settings;
+
+            this.mongoDbClient =
+                new MongoClient(settings.ConnectionString);
+
+            this.mongoDatabase =
+                this.mongoDbClient.GetDatabase(settings.DatabaseName);
 
             this.mongoDbWorkouts = this.mongoDatabase.GetCollection<Workout>("workouts");
         }

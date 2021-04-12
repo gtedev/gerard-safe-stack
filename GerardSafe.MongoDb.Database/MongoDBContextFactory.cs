@@ -4,8 +4,13 @@ namespace GerardSafe.MongoDb.Database
     {
         public static IMongoDBContext CreateContext()
         {
-            var client = MongoDbClient.CreateClient("mongodb://localhost:27017");
-            return new MongoDBContext(client);
+            var settings = new MongoDbSettings
+            {
+                DatabaseName = "local",
+                ConnectionString = "mongodb://localhost:27017"
+            };
+
+            return new MongoDBContext(settings);
         }
     }
 }

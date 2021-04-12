@@ -20,25 +20,7 @@ let init (): Model * Cmd<Msg> =
     let model =
         { WorkoutDate = today ()
           WorkoutOfDay = []
-          Tabs =
-              [ { Name = "Corde a sauter"
-                  isSelected = true
-                  WorkoutItems = Helper.cordeASatuer () }
-                { Name = "Pompes"
-                  isSelected = false
-                  WorkoutItems = Helper.pompes () }
-                { Name = "Dips"
-                  isSelected = false
-                  WorkoutItems = Helper.dips () }
-                { Name = "Tractions"
-                  isSelected = false
-                  WorkoutItems = Helper.tractions () }
-                { Name = "Abdominaux"
-                  isSelected = false
-                  WorkoutItems = Helper.abs () }
-                { Name = "Course a pied"
-                  isSelected = false
-                  WorkoutItems = Helper.courses () } ] }
+          Tabs = [{ isSelected = true ; Name= "Loading workouts..." ; WorkoutItems = [] }]  }
 
     let cmd =
         Cmd.OfAsync.perform workoutApi.getWorkouts () GotWorkouts
@@ -49,9 +31,17 @@ let init (): Model * Cmd<Msg> =
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
     | GotWorkouts workouts ->
-        JS.console.log ("GotWorkouts", workouts)
+        let tabs =
+            workouts
+            |> List.groupBy (fun w -> w |> getWorkoutNameFamily)
+            |> List.mapi (fun index grp ->
+                { Name = fst grp
+                  isSelected = index = 0
+                  WorkoutItems = grp |> toSelectableWorkoutItems  })
 
-        (model, Cmd.none)
+        let newModel = { model with Tabs = tabs}
+
+        (newModel, Cmd.none)
 
     | TabClicked tab ->
 

@@ -9,6 +9,31 @@ open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.DependencyInjection
 open GerardSafe.MongoDb.Database.DependencyInjection
 open GerardSafe.MongoDb.Database
+open GerardSafe.MongoDb.Database.Models
+
+let mapExercises (exercises: Workout list): Exercise list =
+    exercises
+    |> Seq.toList
+    |> List.map
+        (fun exo ->
+            { Name = exo.Name
+              WorkoutFamily = exo.WorkoutFamily })
+
+let mapToWorkoutItemRecord (w: Workout) =
+    match w.Type with
+    | WorkoutType.Exercise ->
+
+        Exercise
+            { Name = w.Name
+              WorkoutFamily = w.WorkoutFamily }
+
+    | WorkoutType.Program ->
+
+        Program
+            { Name = w.Name
+              WorkoutFamily = w.WorkoutFamily
+              Exercises = w.Exercises |> Seq.toList |> mapExercises }
+
 
 let createWorkoutApi (mongoDbContext: IMongoDBContext): WorkoutApi =
     { getWorkouts =
@@ -19,7 +44,7 @@ let createWorkoutApi (mongoDbContext: IMongoDBContext): WorkoutApi =
 
                   let result =
                       workouts
-                      |> Seq.map (fun record -> { Name = record.Name })
+                      |> Seq.map (fun record -> mapToWorkoutItemRecord record)
                       |> Seq.toList
 
                   return result

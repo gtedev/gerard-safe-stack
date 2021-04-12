@@ -7,6 +7,7 @@ open Fable.React
 open Fable.React.Props
 open Fulma
 open Fable.Core
+open Shared
 
 let header () =
     Heading.p [ Heading.Modifiers [ Modifier.TextAlignment(Screen.All, TextAlignment.Centered) ] ] [

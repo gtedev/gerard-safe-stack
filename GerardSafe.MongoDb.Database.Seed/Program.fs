@@ -14,7 +14,6 @@ let main argv =
     let line = Console.ReadLine()
 
     if line = "1"
-    then
-        WorkoutSeed.seedWorkout (dbContext.InsertWorkouts) (fun () -> List.ofSeq(dbContext.GetWorkouts()))
+    then WorkoutSeed.seedWorkout (dbContext.InsertWorkouts) (fun () -> List.ofSeq (dbContext.GetWorkouts()))
 
     0 // return an integer exit code

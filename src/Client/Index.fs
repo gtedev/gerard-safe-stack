@@ -18,7 +18,7 @@ let workoutApi =
 let init (): Model * Cmd<Msg> =
 
     let model =
-        { WorkoutDate  = today()
+        { WorkoutDate = today ()
           WorkoutOfDay = []
           Tabs =
               [ { Name = "Corde a sauter"
@@ -40,16 +40,18 @@ let init (): Model * Cmd<Msg> =
                   isSelected = false
                   WorkoutItems = Helper.courses () } ] }
 
-    let cmd = Cmd.OfAsync.perform workoutApi.getWorkouts () GotWorkouts
+    let cmd =
+        Cmd.OfAsync.perform workoutApi.getWorkouts () GotWorkouts
+
     model, cmd
 
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
     | GotWorkouts workouts ->
-            JS.console.log ("GotWorkouts", workouts)
-            
-            (model, Cmd.none)
+        JS.console.log ("GotWorkouts", workouts)
+
+        (model, Cmd.none)
 
     | TabClicked tab ->
 
@@ -122,10 +124,10 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
     | OnWorkoutDateChanged selectedDate ->
 
-         ({ model with
-                       WorkoutDate = selectedDate },
-                 Cmd.none)
-       
+        ({ model with
+               WorkoutDate = selectedDate },
+         Cmd.none)
+
 
 
 let view (model: Model) (dispatch: Msg -> unit) =

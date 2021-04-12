@@ -19,7 +19,7 @@ let mapExercises (exercises: Workout list): Exercise list =
             { Name = exo.Name
               WorkoutFamily = exo.WorkoutFamily })
 
-let mapToWorkoutItemRecord (w: Workout) =
+let toWorkoutItem (w: Workout) =
     match w.Type with
     | WorkoutType.Exercise ->
 
@@ -44,7 +44,7 @@ let createWorkoutApi (mongoDbContext: IMongoDBContext): WorkoutApi =
 
                   let result =
                       workouts
-                      |> Seq.map (fun record -> mapToWorkoutItemRecord record)
+                      |> Seq.map toWorkoutItem
                       |> Seq.toList
 
                   return result

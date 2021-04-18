@@ -17,4 +17,5 @@
   <ItemGroup>
     <ProjectReference Include="..\GerardSafe.MongoDb.Database\GerardSafe.MongoDb.Database.csproj" />
   </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

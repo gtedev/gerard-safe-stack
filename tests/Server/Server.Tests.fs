@@ -1,4 +1,4 @@
-////module Server.Tests
+module Server.Tests
 
 ////open Expecto
 
